@@ -5,9 +5,10 @@ const int motor2P = 11;
 
 int c = 0;
 int u,d;
-int Kp = 1;
-int Ki = 1;
-int center = 515;
+int Kp = 1;//比例定数
+int Ki = 1;//積分定数
+int center = 515;//センサの中央値
+int max_u = 1; //出力uの最大値を入れる
 
 void setup(){
   Serial.begin(9600);
@@ -47,6 +48,14 @@ void loop(){
   c=center-x;// 今回の偏差
   
   u=P_I(c,d);//出力
+  
+  if(u<0){
+    u=-u;
+  }else{
+    ;
+  }
+  
+  map(u,0,max_u,0,255);//出力をデューティ比の範囲にさめつ
   
   if(x>center){
     analogWrite(10,125);
