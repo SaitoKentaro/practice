@@ -19,44 +19,44 @@ void setup(){
 }
 
 int P_I(int x,int y){
-  
+ 
   int a=(x+y)/2;//今回の偏差と前回の偏差の平均
-  
-  return Kp*x+Ki*a;
+ 
+  return Kp*x+Ki*a;//PI制御出力
 }
 
 void foward(){
   digitalWrite(9,LOW);
   digitalWrite(8,HIGH);
-  delay(5);
+  delay(A);//A,BにHIGHとLOWの割合を時間にしていれる？（uの関係式でanalogWriteのデューティ比と同じになるように？）
   digitalWrite(8,LOW);
-  delay(5);
+  delay(B);
 }
 
 void back(){
   digitalWrite(8,LOW);
   digitalWrite(9,HIGH);
-  delay(5);
+  delay(A);
   digitalWrite(9,LOW);
-  delay(5);
+  delay(B);
 }
 
 void loop(){
   long x;
-  x = analogRead(0);
+  x = analogRead(0);//加速度センサの値の取得
   d=c;//前回の偏差
   c=center-x;// 今回の偏差
-  
+ 
   u=P_I(c,d);//出力
-  
+ 
   if(u<0){
     u=-u;
   }else{
     ;
   }
-  
-  map(u,0,max_u,0,255);//出力をデューティ比の範囲にさめつ
-  
+ 
+  map(u,0,max_u,0,255);//出力をデューティ比の範囲に縮小（デューティ比は０から２５５まで）
+ 
   if(x>center){
     analogWrite(10,125);
     analogWrite(11,LOW);
@@ -66,6 +66,6 @@ void loop(){
     analogWrite(11,125);
     foward();
   }
-  
+ 
   delay(5);
 }
